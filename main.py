@@ -1,3 +1,5 @@
+from jogador.Observer import subject
+from jogador.Observer.notificador import Notificador
 from jogador.preparacao.cor import *
 from jogador.preparacao.objetivos import *
 from jogador.jogador import Jogador
@@ -14,8 +16,13 @@ jogadores = []
 ultimo_id = 0
 max_jogadores = 6
 
+subject = subject.Subject()
+notificador = Notificador()
+subject.attach(notificador)
 
-        
+
+
+
 @app.post("/novoJogador",summary="Entrar no jogo", description="Escolha a uma cor para ser a cor do seu exercito: 1 - AZUL; 2 - BRANCA; 3 - VERMELHA; 4 - PRETA; 5 - AMARELO; 6 - VERDE")
 async def novo_jogador(select_cor:int):
     global ultimo_id  
@@ -23,15 +30,15 @@ async def novo_jogador(select_cor:int):
     if len(jogadores) >= max_jogadores:
         raise HTTPException(status_code=400, detail="O número máximo de jogadores (6) já foi atingido.")
 
-
     cor_escolhida = buscar_cor(select_cor)
     for jogador in jogadores:
         if jogador.cor == cor_escolhida:
             raise HTTPException(status_code=400, detail=f"A cor {cor_escolhida} já foi escolhida por outro jogador.")
 
-
     ultimo_id += 1
-    create_jogador = Jogador(ultimo_id,buscar_cor(select_cor),buscar_objetivo(),distribuir_terri(),pegar_posicao(jogadores),receber_exercito_inicio())
+    create_jogador = Jogador(ultimo_id,buscar_cor(select_cor),buscar_objetivo(),distribuir_terri(),pegar_posicao(jogadores,id),receber_exercito_inicio())
+
+    subject.notify(create_jogador)
     jogadores.append(create_jogador)
     return Response(status_code=201)
 
@@ -62,3 +69,5 @@ async def get_qtd_exercito_jogador(id:int):
 @app.get("/show_id")
 async def show_id():
     return jogadores
+
+
