@@ -5,9 +5,7 @@ from jogador.distribuir_exercito.distribuidor_posicao import *
 from jogador.distribuir_exercito.distribuidor_exercito import *
 from jogador.distribuir_exercito.territorios import *
 
-from fastapi import FastAPI, HTTPException, Response
-
- 
+from fastapi import FastAPI, HTTPException, Query, Response
 
 app = FastAPI()
 
@@ -16,7 +14,7 @@ ultimo_id = 0
 max_jogadores = 6
 
 @app.post("/novoJogador",summary="Entrar no jogo", description="Escolha a uma cor para ser a cor do seu exercito: 1 - AZUL; 2 - BRANCA; 3 - VERMELHA; 4 - PRETA; 5 - AMARELO; 6 - VERDE")
-async def novo_jogador(select_cor:int):
+async def novo_jogador(select_cor:int = Query(...)):
     global ultimo_id
 
     if len(jogadores) >= max_jogadores:
