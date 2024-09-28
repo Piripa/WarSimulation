@@ -1,7 +1,6 @@
 from random import randint
 
-
-def pegar_posicao(jogadores,id):
+def pegar_posicao(jogadores):
     posicao = verificar_posicao(jogadores,sorteio())
     return posicao
 
