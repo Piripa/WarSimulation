@@ -1,7 +1,5 @@
 from pydantic import BaseModel
 
-
-
 class Jogador:
     def __init__(self,id, cor, objetivo, territorio,posicao, qtd_exercito):
         self.id=id
