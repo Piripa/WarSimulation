@@ -1,8 +1,10 @@
 from pydantic import BaseModel
 
+from jogador.Observer.observer import Observer
 
 
-class Jogador:
+
+class Jogador(Observer):
     def __init__(self,id, cor, objetivo, territorio,posicao, qtd_exercito):
         self.id=id
         self.cor = cor
@@ -10,6 +12,12 @@ class Jogador:
         self.territorio = territorio
         self.posicao = posicao
         self.qtd_exercito = qtd_exercito
+        self.notifications = []
+
+    def update(self, jogador, mensagem: str):
+        print(f"Jogador {jogador.id} se juntou ao jogo.")
+        self.notifications.append(mensagem)
+   
 
     def get_cor(self):
         return self.cor
